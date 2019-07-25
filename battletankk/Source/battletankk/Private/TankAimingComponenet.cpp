@@ -1,7 +1,9 @@
 // Fill out your copyright notice in the Description page of Project Settings.
-
-#include "Runtime/Engine/Classes/GameFramework/Actor.h"
 #include "TankAimingComponenet.h"
+#include "TankBarrel.h"
+#include "Runtime/Engine/Classes/Kismet/GameplayStatics.h"
+#include "Runtime/Engine/Classes/GameFramework/Actor.h"
+
 
 // Sets default values for this component's properties
 UTankAimingComponenet::UTankAimingComponenet()
@@ -15,27 +17,55 @@ UTankAimingComponenet::UTankAimingComponenet()
 
 
 // Called when the game starts
-void UTankAimingComponenet::BeginPlay()
-{
-	Super::BeginPlay();
 
-	// ...
-	
-}
-
-
-// Called every frame
-void UTankAimingComponenet::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
-{
-	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
-
-	// ...
-}
 void UTankAimingComponenet::AimAt(FVector HitLocation,float LaunchSpeed) {
 	
-	UE_LOG(LogTemp, Warning, TEXT("firirng at %f"), LaunchSpeed);
- }
-void UTankAimingComponenet::SetBarrelReference(UStaticMeshComponent* BarrelToSet) {
+	if (!Barrel) { return; }
+
+	FVector OutLaunchVelocity(0);
+	FVector StartLocation = Barrel->GetSocketLocation(FName("projectile"));
+	
+	bool bHaveAimSolution = UGameplayStatics::SuggestProjectileVelocity(
+	        this,
+		OutLaunchVelocity,
+		StartLocation,
+		HitLocation,
+		LaunchSpeed,
+		false,
+		0,
+		0,
+		ESuggestProjVelocityTraceOption::DoNotTrace
+		
+	);
+	if ( bHaveAimSolution)
+		
+	{
+		auto AimDirection = OutLaunchVelocity.GetSafeNormal();
+		auto TankName = GetOwner()->GetName();
+		MoveBarrelTowards(AimDirection);
+		auto Time = GetWorld()->GetTimeSeconds();
+		UE_LOG(LogTemp, Warning, TEXT("%f aim slove found"), Time);
+	}
+	else {
+		auto Time = GetWorld()->GetTimeSeconds();
+		UE_LOG(LogTemp, Warning, TEXT("%f no  aim slove found"), Time);
+	}
+}
+	
+	
+
+	
+void UTankAimingComponenet::SetBarrelReference(UTankBarrel* BarrelToSet) {
 
 	Barrel = BarrelToSet;
+}
+
+void UTankAimingComponenet::MoveBarrelTowards(FVector AimDirection) {
+	auto BarrelRotator = Barrel->GetForwardVector().Rotation();
+	auto AimAsRotator = AimDirection.Rotation();
+	auto DeltaRotator = AimAsRotator - BarrelRotator;
+	
+
+	Barrel->Elevate(DeltaRotator.Pitch); //todo remove magc no.
+
 }

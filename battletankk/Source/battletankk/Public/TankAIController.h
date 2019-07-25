@@ -2,7 +2,7 @@
 
 #pragma once
 
-#include "Tank.h"
+
 #include "CoreMinimal.h"
 #include "Runtime/Engine/Classes/Engine/World.h"
 #include "AIController.h"
@@ -12,6 +12,8 @@
 /**
  * 
  */
+
+class ATank;
 UCLASS()
 class BATTLETANKK_API ATankAIController : public AAIController
 {
