@@ -1,6 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 #include "TankAimingComponenet.h"
 #include "TankBarrel.h"
+#include "TankTurret.h"
 #include "Runtime/Engine/Classes/Kismet/GameplayStatics.h"
 #include "Runtime/Engine/Classes/GameFramework/Actor.h"
 
@@ -10,7 +11,7 @@ UTankAimingComponenet::UTankAimingComponenet()
 {
 	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
 	// off to improve performance if you don't need them.
-	PrimaryComponentTick.bCanEverTick = true;
+	PrimaryComponentTick.bCanEverTick = false;
 
 	// ...
 }
@@ -56,8 +57,12 @@ void UTankAimingComponenet::AimAt(FVector HitLocation,float LaunchSpeed) {
 
 	
 void UTankAimingComponenet::SetBarrelReference(UTankBarrel* BarrelToSet) {
-
+	if (!BarrelToSet) { return; }
 	Barrel = BarrelToSet;
+}
+void UTankAimingComponenet::SetTurretReference(UTankTurret* TurretToSet) {
+	if (!TurretToSet) { return; }
+	Turret = TurretToSet;
 }
 
 void UTankAimingComponenet::MoveBarrelTowards(FVector AimDirection) {
@@ -65,7 +70,6 @@ void UTankAimingComponenet::MoveBarrelTowards(FVector AimDirection) {
 	auto AimAsRotator = AimDirection.Rotation();
 	auto DeltaRotator = AimAsRotator - BarrelRotator;
 	
-
-	Barrel->Elevate(DeltaRotator.Pitch); //todo remove magc no.
-
+	Turret->Rotate(DeltaRotator.Yaw);
+	Barrel->Elevate(DeltaRotator.Pitch); 
 }

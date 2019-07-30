@@ -32,7 +32,9 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 	UFUNCTION(BlueprintCallable, Category = Setup)
 		void SetBarrelRefernce(UTankBarrel * BarrelToSet);
+	UFUNCTION(BlueprintCallable, Category = Setup)
+		void SetTurretRefernce(UTankTurret* TurretToSet);
 private:
 	UPROPERTY(EditAnywhere, Category = Firing)
-		float LaunchSpeed = 100000;
+		float LaunchSpeed = 4000;
 };
