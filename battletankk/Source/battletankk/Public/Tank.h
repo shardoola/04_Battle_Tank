@@ -10,6 +10,7 @@
 class UTankBarrel;
 class UTankAimingComponenet;
 class AProjectile;
+class UTankMovementComponent;
 
 UCLASS()
 class BATTLETANKK_API ATank : public APawn
@@ -25,7 +26,9 @@ public:
 
 protected:
 	UTankAimingComponenet * TankAimingComponent = nullptr;
-	
+
+	UPROPERTY(BlueprintReadOnly)
+	UTankMovementComponent* TankMovementComponent = nullptr;
 
 public:	
 	// Called every frame

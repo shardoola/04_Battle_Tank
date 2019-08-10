@@ -3,6 +3,7 @@
 
 #include "Tank.h"
 #include "TankBarrel.h"
+#include "TankMovementComponent.h"
 #include "Projectile.h"
 #include "Runtime/Engine/Classes/Kismet/GameplayStatics.h"
 #include "Runtime/Engine/Classes/GameFramework/Actor.h"
@@ -14,8 +15,8 @@ ATank::ATank()
  	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = false;
 
-	TankAimingComponent = CreateDefaultSubobject<UTankAimingComponenet>(FName(" aIMNG COMPONENT"));
-
+	TankAimingComponent = CreateDefaultSubobject<UTankAimingComponenet>(FName(" AIMING COMPONENT"));
+	
 }
 
 // Called when the game starts or when spawned
