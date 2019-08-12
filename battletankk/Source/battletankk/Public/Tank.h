@@ -6,6 +6,9 @@
 
 #include "GameFramework/Pawn.h"
 #include "Tank.generated.h"
+// Enum for aiming state
+
+
 
 class UTankBarrel;
 class UTankAimingComponenet;
@@ -25,10 +28,13 @@ public:
 		void Fire();
 
 protected:
+	UPROPERTY(BlueprintReadOnly)
 	UTankAimingComponenet * TankAimingComponent = nullptr;
 
 	UPROPERTY(BlueprintReadOnly)
 	UTankMovementComponent* TankMovementComponent = nullptr;
+
+	
 
 public:	
 	// Called every frame
@@ -50,4 +56,7 @@ private:
 	  UPROPERTY(EditDefaultsOnly, Category = Firing)
 	  float ReloadTimeInSeconds = 3;
 	  double LastFireTime = 0; 
+
+	 
+	
 };
