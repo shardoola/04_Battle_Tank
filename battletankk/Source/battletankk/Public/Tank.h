@@ -33,30 +33,20 @@ protected:
 
 	UPROPERTY(BlueprintReadOnly)
 	UTankMovementComponent* TankMovementComponent = nullptr;
-
-	
-
-public:	
-	// Called every frame
-	
-	virtual void BeginPlay() override;
-	// Called to bind functionality to input
-	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
-	UFUNCTION(BlueprintCallable, Category = Setup)
-		void SetBarrelRefernce(UTankBarrel * BarrelToSet);
-	UFUNCTION(BlueprintCallable, Category = Setup)
-		void SetTurretRefernce(UTankTurret* TurretToSet);
 	
 private:
-	UPROPERTY(EditAnywhere, Category = Firing)
+	UPROPERTY(EditAnywhere, Category = "Firing")
 		float LaunchSpeed = 4000;
-	UPROPERTY(EditDefaultsOnly, Category = Setup)
+	UPROPERTY(EditDefaultsOnly, Category = "Setup")
 		TSubclassOf<AProjectile>ProjectileBlueprint;
-	  UTankBarrel* Barrel = nullptr;
-	  UPROPERTY(EditDefaultsOnly, Category = Firing)
+	
+	  UPROPERTY(EditDefaultsOnly, Category = "Firing")
 	  float ReloadTimeInSeconds = 3;
 	  double LastFireTime = 0; 
 
+	  UTankBarrel* Barrel = nullptr; //TODO remove
+
+	  virtual void BeginPlay() override;
 	 
 	
 };
