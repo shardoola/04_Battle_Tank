@@ -3,7 +3,6 @@
 
 #include "Tank.h"
 #include "TankBarrel.h"
-#include "TankMovementComponent.h"
 #include "Projectile.h"
 #include "Runtime/Engine/Classes/Kismet/GameplayStatics.h"
 #include "Runtime/Engine/Classes/GameFramework/Actor.h"
@@ -22,7 +21,12 @@ ATank::ATank()
 
 // Called when the game starts or when spawned
 void ATank::BeginPlay() {
+
 	Super::BeginPlay();
+	auto TankName = GetName();
+	UE_LOG(LogTemp, Warning, TEXT("%s donkey tank Begin Play c++"), *TankName)
+
+
 }
 // Called every frame
 
@@ -31,16 +35,18 @@ void ATank::BeginPlay() {
 
 void ATank::AimAt(FVector HitLocation) {
 
-	if (!TankAimingComponent) { return; }
+	if (!ensure(TankAimingComponent)) { return; }
 	TankAimingComponent->AimAt(HitLocation , LaunchSpeed);
 	
 }
 
 
 void ATank::Fire() {
+
+	if (!ensure(Barrel)) { return; }
 	bool isReloaded = (FPlatformTime::Seconds() - LastFireTime) > ReloadTimeInSeconds;
 	
-	if (Barrel && isReloaded) {
+	if (isReloaded) {
 		auto projectile = GetWorld()->SpawnActor<AProjectile>(
 			ProjectileBlueprint,
 			Barrel->GetSocketLocation(FName("projectile")),
