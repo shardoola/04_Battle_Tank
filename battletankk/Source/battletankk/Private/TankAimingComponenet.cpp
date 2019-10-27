@@ -2,6 +2,7 @@
 #include "TankAimingComponenet.h"
 #include "TankBarrel.h"
 #include "TankTurret.h"
+#include "Projectile.h"
 #include "Runtime/Engine/Classes/Kismet/GameplayStatics.h"
 #include "Runtime/Engine/Classes/GameFramework/Actor.h"
 
@@ -11,15 +12,29 @@ UTankAimingComponenet::UTankAimingComponenet()
 {
 	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
 	// off to improve performance if you don't need them.
-	PrimaryComponentTick.bCanEverTick = false;
+	PrimaryComponentTick.bCanEverTick = true;
 
 	// ...
 }
 
+void UTankAimingComponenet::BeginPlay() {
+	LastFireTime = FPlatformTime::Seconds();
+	// so that first fire is after intial reloade
+
+}
+
+ void UTankAimingComponenet::TickComponent(float DeltaTime, enum ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) {
+	 if (bool isReloaded = (FPlatformTime::Seconds() - LastFireTime) < ReloadTimeInSeconds) {
+		 FiringState = EFiringState::Reloading;
+	 }
+
+}
+
+
 
 // Called when the game starts
 
-void UTankAimingComponenet::AimAt(FVector HitLocation,float LaunchSpeed) {
+void UTankAimingComponenet::AimAt(FVector HitLocation) {
 	
 	if (!ensure(Barrel)) { return; }
 
@@ -67,5 +82,31 @@ void UTankAimingComponenet::Initialise(UTankBarrel* BarrelToSet, UTankTurret* Tu
 	Barrel = BarrelToSet;
 	Turret = TurretToSet;
 
+
+}
+
+	
+void UTankAimingComponenet::Fire() {
+
+	
+
+
+	
+
+	if (FiringState!=EFiringState::Reloading) {
+		if (!ensure(Barrel )) {
+			return;
+		}
+		if (!ensure( ProjectileBlueprint)) {
+			return;
+		}
+		auto projectile = GetWorld()->SpawnActor<AProjectile>(
+			ProjectileBlueprint,
+			Barrel->GetSocketLocation(FName("projectile")),
+			Barrel->GetSocketRotation(FName("projectile"))
+			);
+		projectile->LaunchProjectile(LaunchSpeed);
+		
+	}
 
 }

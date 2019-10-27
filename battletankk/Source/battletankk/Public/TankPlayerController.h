@@ -11,7 +11,7 @@
 /**
  * responsible for aiming
  */
-class ATank;
+class UTankAimingComponenet;
 
 UCLASS()
 class BATTLETANKK_API ATankPlayerController : public APlayerController
@@ -21,8 +21,8 @@ public:
 	virtual void BeginPlay() override;
 	virtual void Tick(float DeltaTime) override;
 protected:
-	UFUNCTION(BlueprintCallable, Category = "Setup")
-		ATank* GetControlledTank() const;
+	
+		
 	UFUNCTION(BlueprintImplementableEvent, Category = "Setup")
 		void FoundAimingComponent(UTankAimingComponenet* AimCompRef);
 private:

@@ -13,7 +13,7 @@
  * 
  */
 
-class ATank;
+class UTankAimingComponenet;
 UCLASS()
 class BATTLETANKK_API ATankAIController : public AAIController
 {
